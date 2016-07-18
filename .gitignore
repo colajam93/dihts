@@ -153,8 +153,8 @@ bower_components
 
 ### external js/css ###
 
-manager/static/js/
-manager/static/css/
+external/static/js/
+external/static/css/
 /static/
 /venv/
 aurpackager.log

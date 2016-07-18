@@ -1,6 +1,7 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 from song.models import Song
 import json
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 
 def _load_filter_condition(condition_json):
@@ -8,6 +9,7 @@ def _load_filter_condition(condition_json):
     return {c['target']: c['value']}
 
 
+@ensure_csrf_cookie
 def search(request):
     conditions = request.GET.getlist('condition[]')
     songs = Song.objects.all()
@@ -19,4 +21,4 @@ def search(request):
         else:
             songs = songs.filter(**filer_condition)
 
-    return HttpResponse('<br>'.join(map(lambda x: str(x), songs)))
+    return render(request, 'search.html', {'songs': songs})
