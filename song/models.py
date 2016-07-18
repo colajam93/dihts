@@ -4,7 +4,7 @@ _MAX_LENGTH = 100
 
 
 class Song(models.Model):
-    track_id = models.IntegerField()
+    persistent_id = models.CharField(max_length=_MAX_LENGTH)
     title = models.CharField(max_length=_MAX_LENGTH)
     artist = models.CharField(max_length=_MAX_LENGTH)
     album = models.CharField(max_length=_MAX_LENGTH)
@@ -13,3 +13,6 @@ class Song(models.Model):
     track_number = models.IntegerField()
     track_count = models.IntegerField()
     year = models.IntegerField()
+
+    def __str__(self):
+        return '{} - {} - {}'.format(self.title, self.artist, self.album)

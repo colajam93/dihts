@@ -9,18 +9,19 @@ class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('path', help='Path to \'iTunes Music Library.xml\'')
         parser.add_argument('-f', '--force', action='store_true', help='Force update')
+        parser.add_argument('--init', action='store_true', help='Initialize')
 
     def handle(self, *args, **options):
-        _entry_point(options['path'], options['force'])
+        _entry_point(**options)
 
 
-def _entry_point(path, force):
+def _entry_point(path, **options):
     if not os.path.exists(path):
         raise CommandError('Cannot access \'{}\''.format(path))
     try:
         with open(path, 'rb') as f:
             tracks = _load_tracks(f)
-        _song_update(tracks, force)
+        _song_update(tracks, **options)
     except (FileNotFoundError, PermissionError) as e:
         raise CommandError(e)
 
@@ -36,19 +37,21 @@ def _load_tracks(f):
         raise CommandError(e)
 
 
-def _song_update(tracks, force):
-    for k, v in tracks.items():
-        track_id = int(k)
-        try:
-            song = Song.objects.get(track_id=track_id)
-        except Song.DoesNotExist:
-            song = Song()
-        else:
-            if not force:
-                continue
+def _song_update(tracks, **options):
+    for v in tracks.items():
+        persistent_id = v['Persistent ID']
+        song = Song()
+        if not options['init']:
+            try:
+                song = Song.objects.get(persistent_id=persistent_id)
+            except Song.DoesNotExist:
+                pass
+            else:
+                if not options['force']:
+                    continue
 
         try:
-            song.track_id = track_id
+            song.persistent_id = persistent_id
             song.title = v['Name']
             song.artist = v['Artist']
             song.album = v['Album']
