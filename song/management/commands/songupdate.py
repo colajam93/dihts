@@ -8,18 +8,19 @@ from xml.parsers.expat import ExpatError
 class Command(BaseCommand):
     def add_arguments(self, parser):
         parser.add_argument('path', help='Path to \'iTunes Music Library.xml\'')
+        parser.add_argument('-f', '--force', action='store_true', help='Force update')
 
     def handle(self, *args, **options):
-        _entry_point(options['path'])
+        _entry_point(options['path'], options['force'])
 
 
-def _entry_point(path):
+def _entry_point(path, force):
     if not os.path.exists(path):
         raise CommandError('Cannot access \'{}\''.format(path))
     try:
         with open(path, 'rb') as f:
             tracks = _load_tracks(f)
-        _song_update(tracks)
+        _song_update(tracks, force)
     except (FileNotFoundError, PermissionError) as e:
         raise CommandError(e)
 
@@ -35,11 +36,19 @@ def _load_tracks(f):
         raise CommandError(e)
 
 
-def _song_update(tracks):
+def _song_update(tracks, force):
     for k, v in tracks.items():
-        song = Song()
+        track_id = int(k)
         try:
-            song.track_id = int(k)
+            song = Song.objects.get(track_id=track_id)
+        except Song.DoesNotExist:
+            song = Song()
+        else:
+            if not force:
+                continue
+
+        try:
+            song.track_id = track_id
             song.title = v['Name']
             song.artist = v['Artist']
             song.album = v['Album']
