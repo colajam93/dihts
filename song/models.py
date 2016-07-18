@@ -4,6 +4,7 @@ _MAX_LENGTH = 100
 
 
 class Song(models.Model):
+    track_id = models.IntegerField()
     title = models.CharField(max_length=_MAX_LENGTH)
     artist = models.CharField(max_length=_MAX_LENGTH)
     album = models.CharField(max_length=_MAX_LENGTH)
