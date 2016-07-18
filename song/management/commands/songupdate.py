@@ -38,7 +38,7 @@ def _load_tracks(f):
 
 
 def _song_update(tracks, **options):
-    for v in tracks.items():
+    for v in tracks.values():
         persistent_id = v['Persistent ID']
         song = Song()
         if not options['init']:
