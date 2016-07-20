@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from song.models import Song
+from song.models import Song, Artist, Album, AlbumArtist, Genre, Year
 import os.path
 import plistlib
 from xml.parsers.expat import ExpatError
@@ -37,9 +37,21 @@ def _load_tracks(f):
         raise CommandError(e)
 
 
+def _foreign_field(class_, **value):
+    try:
+        return class_.objects.get(**value)
+    except class_.DoesNotExist:
+        n = class_(**value)
+        n.save()
+        return n
+
+
 def _song_update(tracks, **options):
     for v in tracks.values():
-        persistent_id = v['Persistent ID']
+        try:
+            persistent_id = v['Persistent ID']
+        except KeyError as e:
+            raise CommandError(e)
         song = Song()
         if not options['init']:
             try:
@@ -53,13 +65,13 @@ def _song_update(tracks, **options):
         try:
             song.persistent_id = persistent_id
             song.title = v['Name']
-            song.artist = v['Artist']
-            song.album = v['Album']
-            song.genre = v['Genre']
-            song.year = v.get('Year', 0)
-            song.album_artist = v.get('Album Artist', song.artist)
             song.track_number = v.get('Track Number', 0)
-            song.track_count = v.get('Track Count', 0)
+
+            song.artist = _foreign_field(Artist, value=v['Artist'])
+            song.album = _foreign_field(Album, value=v['Album'], track_count=v.get('Track Count', 0))
+            song.album_artist = _foreign_field(AlbumArtist, value=v.get('Album Artist', song.artist.value))
+            song.genre = _foreign_field(Genre, value=v['Genre'])
+            song.year = _foreign_field(Year, value=v.get('Year', 0))
         except KeyError as e:
             raise CommandError(e)
         song.save()
