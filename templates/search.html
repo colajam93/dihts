@@ -20,6 +20,34 @@
                 </fieldset>
             </div>
         </div>
+        <div class="form-group row">
+            <div class="col-xs-12">
+                <fieldset class="form-group">
+                    <label for="search_type">Search type</label>
+                    <div id="search_type" class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary-outline" id="contains_label">
+                            <input type="radio" name="search_type" value="contains" id="contains_radio"
+                                   autocomplete="off">
+                            Contains
+                        </label>
+                        <label class="btn btn-primary-outline" id="exact_label">
+                            <input type="radio" name="search_type" value="exact" id="exact_radio" autocomplete="off">
+                            Exact
+                        </label>
+                        <label class="btn btn-primary-outline" id="startswith_label">
+                            <input type="radio" name="search_type" value="startswith" id="startswith_radio"
+                                   autocomplete="off">
+                            Startswith
+                        </label>
+                        <label class="btn btn-primary-outline" id="endswith_label">
+                            <input type="radio" name="search_type" value="endswith" id="endswith_radio"
+                                   autocomplete="off">
+                            Endswith
+                        </label>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
 
         <div class="form-group row">
             <div class="col-xs-12">
@@ -62,6 +90,8 @@
         window.onload = function () {
             document.getElementById('{{ search_for }}_radio').checked = true;
             document.getElementById('{{ search_for }}_label').className += ' active';
+            document.getElementById('{{ search_type }}_radio').checked = true;
+            document.getElementById('{{ search_type }}_label').className += ' active';
         }
     </script>
 {% endblock content %}
