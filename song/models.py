@@ -3,15 +3,16 @@ from django.db import models
 _MAX_LENGTH = 100
 
 
-class AlbumArtist(models.Model):
+class Genre(models.Model):
     value = models.CharField(max_length=_MAX_LENGTH)
 
     def __str__(self):
         return self.value
 
 
-class Genre(models.Model):
+class AlbumArtist(models.Model):
     value = models.CharField(max_length=_MAX_LENGTH)
+    genre = models.ForeignKey(Genre)
 
     def __str__(self):
         return self.value
@@ -26,7 +27,6 @@ class Year(models.Model):
 
 class Artist(models.Model):
     artist = models.CharField(max_length=_MAX_LENGTH)
-    genre = models.ForeignKey(Genre)
 
     def __str__(self):
         return self.artist

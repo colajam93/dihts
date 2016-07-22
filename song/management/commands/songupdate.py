@@ -54,11 +54,11 @@ def _register_song(v):
         song.title = v['Name']
         song.track_number = v.get('Track Number', 0)
 
-        song.artist = _get_or_register(Artist, artist=v['Artist'],
-                                       genre=_get_or_register(Genre, value=v['Genre']))
+        song.artist = _get_or_register(Artist, artist=v['Artist'])
         song.album = _get_or_register(Album, album=v['Album'], track_count=v.get('Track Count', 0),
                                       album_artist=_get_or_register(AlbumArtist,
-                                                                    value=v.get('Album Artist', v['Artist'])),
+                                                                    value=v.get('Album Artist', v['Artist']),
+                                                                    genre=_get_or_register(Genre, value=v['Genre'])),
                                       year=_get_or_register(Year, value=v.get('Year', 0)))
         song.save()
 

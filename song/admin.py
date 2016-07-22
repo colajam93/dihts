@@ -7,7 +7,7 @@ class SongAdmin(admin.ModelAdmin):
 
 
 class ArtistAdmin(admin.ModelAdmin):
-    list_display = ('artist', 'genre')
+    list_display = ('artist',)
 
 
 class AlbumAdmin(admin.ModelAdmin):
@@ -15,7 +15,7 @@ class AlbumAdmin(admin.ModelAdmin):
 
 
 class AlbumArtistAdmin(admin.ModelAdmin):
-    list_display = ('value',)
+    list_display = ('value', 'genre')
 
 
 class GenreAdmin(admin.ModelAdmin):
