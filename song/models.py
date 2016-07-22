@@ -29,7 +29,7 @@ class Artist(models.Model):
     genre = models.ForeignKey(Genre)
 
     def __str__(self):
-        return self.value
+        return self.artist
 
 
 class Album(models.Model):
@@ -39,7 +39,7 @@ class Album(models.Model):
     year = models.ForeignKey(Year)
 
     def __str__(self):
-        return self.value
+        return self.album
 
 
 class Song(models.Model):

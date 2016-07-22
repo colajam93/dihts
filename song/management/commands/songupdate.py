@@ -38,7 +38,7 @@ def _load_tracks(f):
         raise CommandError(e)
 
 
-def _foreign_field(class_, **value):
+def _get_or_register(class_, **value):
     try:
         return class_.objects.get(**value)
     except class_.DoesNotExist:
@@ -54,12 +54,14 @@ def _register_song(v):
         song.title = v['Name']
         song.track_number = v.get('Track Number', 0)
 
-        song.artist = _foreign_field(Artist, value=v['Artist'])
-        song.album = _foreign_field(Album, value=v['Album'], track_count=v.get('Track Count', 0))
-        song.album_artist = _foreign_field(AlbumArtist, value=v.get('Album Artist', song.artist.value))
-        song.genre = _foreign_field(Genre, value=v['Genre'])
-        song.year = _foreign_field(Year, value=v.get('Year', 0))
+        song.artist = _get_or_register(Artist, artist=v['Artist'],
+                                       genre=_get_or_register(Genre, value=v['Genre']))
+        song.album = _get_or_register(Album, album=v['Album'], track_count=v.get('Track Count', 0),
+                                      album_artist=_get_or_register(AlbumArtist,
+                                                                    value=v.get('Album Artist', v['Artist'])),
+                                      year=_get_or_register(Year, value=v.get('Year', 0)))
         song.save()
+
     except KeyError as e:
         raise CommandError(e)
 
