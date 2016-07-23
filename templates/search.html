@@ -159,14 +159,12 @@
     </div>
     <script type="application/javascript">
         window.onload = function () {
-            document.getElementById('{{ for }}_radio').checked = true;
-            document.getElementById('{{ for }}_label').className += ' active';
-            document.getElementById('{{ in }}_radio').checked = true;
-            document.getElementById('{{ in }}_label').className += ' active';
-            document.getElementById('{{ match }}_radio').checked = true;
-            document.getElementById('{{ match }}_label').className += ' active';
+            ['{{ for }}', '{{ in }}', '{{ match }}'].forEach(i => {
+                document.getElementById(i + '_radio').checked = true;
+                document.getElementById(i + '_label').className += ' active';
+            });
             document.getElementById('keyword').value = '{{ keyword }}';
-        }
+        };
         function move_page(page) {
             document.getElementById('page').value = page;
             const form = document.getElementById('f');

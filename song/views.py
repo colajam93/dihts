@@ -75,6 +75,6 @@ def search(request):
         elif search_for == SONG:
             result = _search_song(**params)
     page = int(request.GET.get('page', 1))
-    params[RESULTS] = Paginator(result, 20).page(page)
+    params[RESULTS] = Paginator(result, 15).page(page)
 
     return render(request, 'search.html', params)
