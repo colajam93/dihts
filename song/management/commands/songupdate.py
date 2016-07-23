@@ -60,7 +60,6 @@ def _register_song(v):
                                                                     value=v.get('Album Artist', v['Artist']),
                                                                     genre=_get_or_register(Genre, value=v['Genre'])))
         song.save()
-
     except KeyError as e:
         raise CommandError(e)
 

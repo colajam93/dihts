@@ -3,7 +3,7 @@ from song.models import Song, Album
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.paginator import Paginator
 
-FOR, IN, KEYWORD, MATCH, RESULTS, VALUE = ('for', 'in', 'keyword', 'match', 'results', 'value')
+FOR, IN, KEYWORD, MATCH, RESULTS, VALUE, PAGE = ('for', 'in', 'keyword', 'match', 'results', 'value', 'page')
 ALBUM, SONG = ('album', 'song')
 TITLE, ARTIST, GENRE, ALBUM_ARTIST = ('title', 'artist', 'genre', 'album_artist')
 CONTAINS, EXACT, FORWARD, BACKWARD = ('contains', 'exact', 'forward', 'backward')
@@ -37,7 +37,7 @@ def _search_album(**params):
     elif search_in == ALBUM_ARTIST:
         q = _query_join(ALBUM_ARTIST, VALUE)
     query = {match_suffix.format(q): params[KEYWORD]}
-    result = Album.objects.filter(**query).order_by('album', 'album_artist')
+    result = Album.objects.filter(**query).order_by(_query_join(ALBUM_ARTIST, VALUE), ALBUM)
     return list(map(lambda x: {TITLE: x.album, ALBUM_ARTIST: x.album_artist, ARTIST: '', ALBUM: ''}, result))
 
 
@@ -54,7 +54,8 @@ def _search_song(**params):
     elif search_in == ALBUM_ARTIST:
         q = _query_join(ALBUM, ALBUM_ARTIST, VALUE)
     query = {match_suffix.format(q): params[KEYWORD]}
-    result = Song.objects.filter(**query).order_by('album__album_artist', 'album', 'title', 'artist')
+    result = Song.objects.filter(**query).order_by(_query_join(ALBUM, ALBUM_ARTIST), _query_join(ALBUM, ALBUM), TITLE,
+                                                   _query_join(ARTIST, ARTIST))
     return list(
         map(lambda x: {TITLE: x.title, ALBUM_ARTIST: x.album.album_artist, ARTIST: x.artist, ALBUM: x.album},
             result))
@@ -74,7 +75,7 @@ def search(request):
             result = _search_album(**params)
         elif search_for == SONG:
             result = _search_song(**params)
-    page = int(request.GET.get('page', 1))
+    page = int(request.GET.get(PAGE, 1))
     params[RESULTS] = Paginator(result, 15).page(page)
 
     return render(request, 'search.html', params)
