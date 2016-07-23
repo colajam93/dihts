@@ -1,0 +1,13 @@
+[Unit]
+Description=Simple iTunes library search tool service
+After=network.target
+
+[Service]
+ExecStart=/usr/bin/uwsgi --ini /home/user/dihts/dihts.ini
+ExecStop=/bin/kill -HUP $MAINPID
+User=user
+Group=user
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
