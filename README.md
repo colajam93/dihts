@@ -1,6 +1,7 @@
 # Do I have this song?
 
 Simple iTunes library search tool using Django.
+Build database from `iTunes Music Library.xml` and search songs or albums from DB.
 
 ## Install
 
