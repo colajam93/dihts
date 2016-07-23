@@ -3,7 +3,7 @@ from song.models import Song, Album
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.core.paginator import Paginator
 
-FOR, IN, KEYWORD, MATCH, RESULTS = ('for', 'in', 'keyword', 'match', 'results')
+FOR, IN, KEYWORD, MATCH, RESULTS, VALUE = ('for', 'in', 'keyword', 'match', 'results', 'value')
 ALBUM, SONG = ('album', 'song')
 TITLE, ARTIST, GENRE, ALBUM_ARTIST, YEAR = ('title', 'artist', 'genre', 'album_artist', 'year')
 CONTAINS, EXACT, FORWARD, BACKWARD = ('contains', 'exact', 'forward', 'backward')
@@ -20,23 +20,27 @@ def _match_suffix(match):
         return '{}__endswith'
 
 
+def _query_join(*queries):
+    return '__'.join(queries)
+
+
 def _search_album(**params):
     search_in = params[IN]
     match_suffix = _match_suffix(params[MATCH])
     q = ''
     if search_in == TITLE:
-        q = 'album'
+        q = ALBUM
     elif search_in == ARTIST:
-        q = 'album_artist__value'
+        q = _query_join(ALBUM_ARTIST, VALUE)
     elif search_in == GENRE:
-        q = 'album_artist__genre__value'
+        q = _query_join(ALBUM_ARTIST, GENRE, VALUE)
     elif search_in == ALBUM_ARTIST:
-        q = 'album_artist__value'
+        q = _query_join(ALBUM_ARTIST, VALUE)
     elif search_in == YEAR:
-        q = 'year__value'
+        q = _query_join(YEAR, VALUE)
     query = {match_suffix.format(q): params[KEYWORD]}
     result = Album.objects.filter(**query).order_by('album', 'album_artist')
-    return list(map(lambda x: {'title': x.album, 'album_artist': x.album_artist, 'artist': '', 'album': ''}, result))
+    return list(map(lambda x: {TITLE: x.album, ALBUM_ARTIST: x.album_artist, ARTIST: '', ALBUM: ''}, result))
 
 
 def _search_song(**params):
@@ -44,19 +48,19 @@ def _search_song(**params):
     match_suffix = _match_suffix(params[MATCH])
     q = ''
     if search_in == TITLE:
-        q = 'title'
+        q = TITLE
     elif search_in == ARTIST:
-        q = 'artist__artist'
+        q = _query_join(ARTIST, ARTIST)
     elif search_in == GENRE:
-        q = 'album__album_artist__genre__value'
+        q = _query_join(ALBUM, ALBUM_ARTIST, GENRE, VALUE)
     elif search_in == ALBUM_ARTIST:
-        q = 'album__album_artist__value'
+        q = _query_join(ALBUM, ALBUM_ARTIST, VALUE)
     elif search_in == YEAR:
-        q = 'album__year__value'
+        q = _query_join(ALBUM, YEAR, VALUE)
     query = {match_suffix.format(q): params[KEYWORD]}
     result = Song.objects.filter(**query).order_by('album__album_artist', 'album', 'title', 'artist')
     return list(
-        map(lambda x: {'title': x.title, 'album_artist': x.album.album_artist, 'artist': x.artist, 'album': x.album},
+        map(lambda x: {TITLE: x.title, ALBUM_ARTIST: x.album.album_artist, ARTIST: x.artist, ALBUM: x.album},
             result))
 
 
