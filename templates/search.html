@@ -5,86 +5,72 @@
     <form id="f" action="{% url 'song:search' %}">
         <input type="hidden" id="page" name="page" value="1">
         <div class="form-group row">
-            <div class="col-xs-12">
-                <fieldset class="form-group">
-                    <label for="for">For</label>
-                    <div id="for" class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-primary-outline" id="album_label">
-                            <input type="radio" name="for" value="album" id="album_radio" autocomplete="off">
-                            Album
-                        </label>
-                        <label class="btn btn-primary-outline" id="song_label">
-                            <input type="radio" name="for" value="song" id="song_radio" autocomplete="off">
-                            Song
-                        </label>
-                    </div>
-                </fieldset>
+            <label class="form-control-label col-xs-1" for="for">For</label>
+            <div id="for" class="btn-group col-xs-11" data-toggle="buttons">
+                <label class="btn btn-primary-outline" id="album_label">
+                    <input type="radio" name="for" value="album" id="album_radio" autocomplete="off">
+                    Album
+                </label>
+                <label class="btn btn-primary-outline" id="song_label">
+                    <input type="radio" name="for" value="song" id="song_radio" autocomplete="off">
+                    Song
+                </label>
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-xs-12">
-                <fieldset class="form-group">
-                    <label for="in">In</label>
-                    <div id="in" class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-primary-outline" id="title_label">
-                            <input type="radio" name="in" value="title" id="title_radio" autocomplete="off">
-                            Title
-                        </label>
-                        <label class="btn btn-primary-outline" id="artist_label">
-                            <input type="radio" name="in" value="artist" id="artist_radio" autocomplete="off">
-                            Artist
-                        </label>
-                        <label class="btn btn-primary-outline" id="genre_label">
-                            <input type="radio" name="in" value="genre" id="genre_radio" autocomplete="off">
-                            Genre
-                        </label>
-                        <label class="btn btn-primary-outline" id="album_artist_label">
-                            <input type="radio" name="in" value="album_artist" id="album_artist_radio"
-                                   autocomplete="off">
-                            Album Artist
-                        </label>
-                    </div>
-                </fieldset>
+            <label class="form-control-label col-xs-1" for="in">In</label>
+            <div id="in" class="btn-group col-xs-11" data-toggle="buttons">
+                <label class="btn btn-primary-outline" id="title_label">
+                    <input type="radio" name="in" value="title" id="title_radio" autocomplete="off">
+                    Title
+                </label>
+                <label class="btn btn-primary-outline" id="artist_label">
+                    <input type="radio" name="in" value="artist" id="artist_radio" autocomplete="off">
+                    Artist
+                </label>
+                <label class="btn btn-primary-outline" id="genre_label">
+                    <input type="radio" name="in" value="genre" id="genre_radio" autocomplete="off">
+                    Genre
+                </label>
+                <label class="btn btn-primary-outline" id="album_artist_label">
+                    <input type="radio" name="in" value="album_artist" id="album_artist_radio"
+                           autocomplete="off">
+                    Album Artist
+                </label>
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-xs-12">
-                <fieldset class="form-group">
-                    <label for="keyword">Keyword</label>
-                    <input type="text" class="form-control" id="keyword" name="keyword" required>
-                </fieldset>
+            <label class="form-control-label col-xs-1" for="keyword">Keyword</label>
+            <div class="col-xs-11">
+                <input type="text" class="form-control" id="keyword" name="keyword" required>
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-xs-12">
-                <fieldset class="form-group">
-                    <label for="match">Match</label>
-                    <div id="match" class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-primary-outline" id="contains_label">
-                            <input type="radio" name="match" value="contains" id="contains_radio"
-                                   autocomplete="off">
-                            Contains
-                        </label>
-                        <label class="btn btn-primary-outline" id="exact_label">
-                            <input type="radio" name="match" value="exact" id="exact_radio" autocomplete="off">
-                            Exact
-                        </label>
-                        <label class="btn btn-primary-outline" id="forward_label">
-                            <input type="radio" name="match" value="forward" id="forward_radio"
-                                   autocomplete="off">
-                            Forward
-                        </label>
-                        <label class="btn btn-primary-outline" id="backward_label">
-                            <input type="radio" name="match" value="backward" id="backward_radio"
-                                   autocomplete="off">
-                            Backward
-                        </label>
-                    </div>
-                </fieldset>
+            <label class="form-control-label col-xs-1" for="match">Match</label>
+            <div id="match" class="btn-group col-xs-11" data-toggle="buttons">
+                <label class="btn btn-primary-outline" id="contains_label">
+                    <input type="radio" name="match" value="contains" id="contains_radio"
+                           autocomplete="off">
+                    Contains
+                </label>
+                <label class="btn btn-primary-outline" id="exact_label">
+                    <input type="radio" name="match" value="exact" id="exact_radio" autocomplete="off">
+                    Exact
+                </label>
+                <label class="btn btn-primary-outline" id="forward_label">
+                    <input type="radio" name="match" value="forward" id="forward_radio"
+                           autocomplete="off">
+                    Forward
+                </label>
+                <label class="btn btn-primary-outline" id="backward_label">
+                    <input type="radio" name="match" value="backward" id="backward_radio"
+                           autocomplete="off">
+                    Backward
+                </label>
             </div>
         </div>
         <div class="form-group row">
-            <div class="col-xs-12">
+            <div class="col-xs-offset-1 col-xs-12">
                 <button type="submit" class="btn btn-primary">Search</button>
             </div>
         </div>
