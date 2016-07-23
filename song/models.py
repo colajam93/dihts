@@ -18,13 +18,6 @@ class AlbumArtist(models.Model):
         return self.value
 
 
-class Year(models.Model):
-    value = models.IntegerField()
-
-    def __str__(self):
-        return str(self.value)
-
-
 class Artist(models.Model):
     artist = models.CharField(max_length=_MAX_LENGTH)
 
@@ -36,7 +29,6 @@ class Album(models.Model):
     album = models.CharField(max_length=_MAX_LENGTH)
     track_count = models.IntegerField(blank=True)
     album_artist = models.ForeignKey(AlbumArtist)
-    year = models.ForeignKey(Year)
 
     def __str__(self):
         return self.album

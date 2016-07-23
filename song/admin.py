@@ -1,5 +1,5 @@
 from django.contrib import admin
-from song.models import Song, Artist, Album, AlbumArtist, Genre, Year
+from song.models import Song, Artist, Album, AlbumArtist, Genre
 
 
 class SongAdmin(admin.ModelAdmin):
@@ -11,7 +11,7 @@ class ArtistAdmin(admin.ModelAdmin):
 
 
 class AlbumAdmin(admin.ModelAdmin):
-    list_display = ('album', 'track_count', 'album_artist', 'year')
+    list_display = ('album', 'track_count', 'album_artist')
 
 
 class AlbumArtistAdmin(admin.ModelAdmin):
@@ -22,13 +22,8 @@ class GenreAdmin(admin.ModelAdmin):
     list_display = ('value',)
 
 
-class YearAdmin(admin.ModelAdmin):
-    list_display = ('value',)
-
-
 admin.site.register(Song, SongAdmin)
 admin.site.register(Artist, ArtistAdmin)
 admin.site.register(Album, AlbumAdmin)
 admin.site.register(AlbumArtist, AlbumArtistAdmin)
 admin.site.register(Genre, GenreAdmin)
-admin.site.register(Year, YearAdmin)

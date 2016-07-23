@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from song.models import Song, Artist, Album, AlbumArtist, Genre, Year
+from song.models import Song, Artist, Album, AlbumArtist, Genre
 import os.path
 import plistlib
 from xml.parsers.expat import ExpatError
@@ -58,8 +58,7 @@ def _register_song(v):
         song.album = _get_or_register(Album, album=v['Album'], track_count=v.get('Track Count', 0),
                                       album_artist=_get_or_register(AlbumArtist,
                                                                     value=v.get('Album Artist', v['Artist']),
-                                                                    genre=_get_or_register(Genre, value=v['Genre'])),
-                                      year=_get_or_register(Year, value=v.get('Year', 0)))
+                                                                    genre=_get_or_register(Genre, value=v['Genre'])))
         song.save()
 
     except KeyError as e:
@@ -68,7 +67,7 @@ def _register_song(v):
 
 def _song_update(tracks, **options):
     if options['init']:
-        for class_ in (Song, Artist, Album, AlbumArtist, Genre, Year):
+        for class_ in (Song, Artist, Album, AlbumArtist, Genre):
             class_.objects.all().delete()
 
     for v in tracks.values():

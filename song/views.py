@@ -5,7 +5,7 @@ from django.core.paginator import Paginator
 
 FOR, IN, KEYWORD, MATCH, RESULTS, VALUE = ('for', 'in', 'keyword', 'match', 'results', 'value')
 ALBUM, SONG = ('album', 'song')
-TITLE, ARTIST, GENRE, ALBUM_ARTIST, YEAR = ('title', 'artist', 'genre', 'album_artist', 'year')
+TITLE, ARTIST, GENRE, ALBUM_ARTIST = ('title', 'artist', 'genre', 'album_artist')
 CONTAINS, EXACT, FORWARD, BACKWARD = ('contains', 'exact', 'forward', 'backward')
 
 
@@ -36,8 +36,6 @@ def _search_album(**params):
         q = _query_join(ALBUM_ARTIST, GENRE, VALUE)
     elif search_in == ALBUM_ARTIST:
         q = _query_join(ALBUM_ARTIST, VALUE)
-    elif search_in == YEAR:
-        q = _query_join(YEAR, VALUE)
     query = {match_suffix.format(q): params[KEYWORD]}
     result = Album.objects.filter(**query).order_by('album', 'album_artist')
     return list(map(lambda x: {TITLE: x.album, ALBUM_ARTIST: x.album_artist, ARTIST: '', ALBUM: ''}, result))
@@ -55,8 +53,6 @@ def _search_song(**params):
         q = _query_join(ALBUM, ALBUM_ARTIST, GENRE, VALUE)
     elif search_in == ALBUM_ARTIST:
         q = _query_join(ALBUM, ALBUM_ARTIST, VALUE)
-    elif search_in == YEAR:
-        q = _query_join(ALBUM, YEAR, VALUE)
     query = {match_suffix.format(q): params[KEYWORD]}
     result = Song.objects.filter(**query).order_by('album__album_artist', 'album', 'title', 'artist')
     return list(
