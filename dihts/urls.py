@@ -17,10 +17,16 @@ from django.conf.urls import url, include
 from django.contrib import admin
 from dihts.settings import URL_PREFIX
 
-_application_directory = URL_PREFIX if not URL_PREFIX or URL_PREFIX[0] != '/' else URL_PREFIX[1:]
+
+def _application_directory():
+    if URL_PREFIX:
+        return URL_PREFIX.strip('/') + '/'
+    else:
+        return URL_PREFIX
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^{}'.format(_application_directory),
+    url(r'^{}'.format(_application_directory()),
         include('song.urls', namespace='song'))
 ]
