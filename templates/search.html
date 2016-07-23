@@ -1,23 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h3>Do I Have This Song?</h3>
+    <h1>Do I Have This Song?</h1>
     <form action="{% url 'song:search' %}">
         <div class="form-group row">
             <div class="col-xs-12">
                 <fieldset class="form-group">
-                    <label for="search_for">Search for</label>
-                    <div id="search_for" class="btn-group" data-toggle="buttons">
+                    <label for="for">For</label>
+                    <div id="for" class="btn-group" data-toggle="buttons">
                         <label class="btn btn-primary-outline" id="album_label">
-                            <input type="radio" name="search_for" value="album" id="album_radio" autocomplete="off">
-                            Album (title)
-                        </label>
-                        <label class="btn btn-primary-outline" id="album_artist_label">
-                            <input type="radio" name="search_for" value="album_artist" id="album_artist_radio" autocomplete="off">
-                            Album (artist)
+                            <input type="radio" name="for" value="album" id="album_radio" autocomplete="off">
+                            Album
                         </label>
                         <label class="btn btn-primary-outline" id="song_label">
-                            <input type="radio" name="search_for" value="song" id="song_radio" autocomplete="off">
+                            <input type="radio" name="for" value="song" id="song_radio" autocomplete="off">
                             Song
                         </label>
                     </div>
@@ -27,37 +23,66 @@
         <div class="form-group row">
             <div class="col-xs-12">
                 <fieldset class="form-group">
-                    <label for="search_type">Search type</label>
-                    <div id="search_type" class="btn-group" data-toggle="buttons">
-                        <label class="btn btn-primary-outline" id="contains_label">
-                            <input type="radio" name="search_type" value="contains" id="contains_radio"
-                                   autocomplete="off">
-                            Contains
+                    <label for="in">In</label>
+                    <div id="in" class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary-outline" id="title_label">
+                            <input type="radio" name="in" value="title" id="title_radio" autocomplete="off">
+                            Title
                         </label>
-                        <label class="btn btn-primary-outline" id="exact_label">
-                            <input type="radio" name="search_type" value="exact" id="exact_radio" autocomplete="off">
-                            Exact
+                        <label class="btn btn-primary-outline" id="artist_label">
+                            <input type="radio" name="in" value="artist" id="artist_radio" autocomplete="off">
+                            Artist
                         </label>
-                        <label class="btn btn-primary-outline" id="startswith_label">
-                            <input type="radio" name="search_type" value="startswith" id="startswith_radio"
-                                   autocomplete="off">
-                            Startswith
+                        <label class="btn btn-primary-outline" id="genre_label">
+                            <input type="radio" name="in" value="genre" id="genre_radio" autocomplete="off">
+                            Genre
                         </label>
-                        <label class="btn btn-primary-outline" id="endswith_label">
-                            <input type="radio" name="search_type" value="endswith" id="endswith_radio"
+                        <label class="btn btn-primary-outline" id="album_artist_label">
+                            <input type="radio" name="in" value="album_artist" id="album_artist_radio"
                                    autocomplete="off">
-                            Endswith
+                            Album Artist
+                        </label>
+                        <label class="btn btn-primary-outline" id="year_label">
+                            <input type="radio" name="in" value="year" id="year_radio" autocomplete="off">
+                            Year
                         </label>
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="form-group row">
             <div class="col-xs-12">
                 <fieldset class="form-group">
                     <label for="keyword">Keyword</label>
                     <input type="text" class="form-control" id="keyword" name="keyword" required>
+                </fieldset>
+            </div>
+        </div>
+        <div class="form-group row">
+            <div class="col-xs-12">
+                <fieldset class="form-group">
+                    <label for="match">Match</label>
+                    <div id="match" class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-primary-outline" id="contains_label">
+                            <input type="radio" name="match" value="contains" id="contains_radio"
+                                   autocomplete="off">
+                            Contains
+                        </label>
+                        <label class="btn btn-primary-outline" id="exact_label">
+                            <input type="radio" name="match" value="exact" id="exact_radio" autocomplete="off">
+                            Exact
+                        </label>
+                        <label class="btn btn-primary-outline" id="forward_label">
+                            <input type="radio" name="match" value="forward" id="forward_radio"
+                                   autocomplete="off">
+                            Forward
+                        </label>
+                        <label class="btn btn-primary-outline" id="backward_label">
+                            <input type="radio" name="match" value="backward" id="backward_radio"
+                                   autocomplete="off">
+                            Backward
+                        </label>
+                    </div>
                 </fieldset>
             </div>
         </div>
@@ -73,17 +98,19 @@
             <table class="table table-striped table-bordered table-hover">
                 <thead>
                 <tr>
-                    <th>Column 1</th>
-                    <th>Column 2</th>
-                    <th>Column 3</th>
+                    <th>Title</th>
+                    <th>Album Artist</th>
+                    <th>Artist</th>
+                    <th>Album</th>
                 </tr>
                 </thead>
                 <tbody>
                 {% for result in results %}
                     <tr>
-                        <td>{{ result.column1 }}</td>
-                        <td>{{ result.column2 }}</td>
-                        <td>{{ result.column3 }}</td>
+                        <td>{{ result.title }}</td>
+                        <td>{{ result.album_artist }}</td>
+                        <td>{{ result.artist }}</td>
+                        <td>{{ result.album }}</td>
                     </tr>
                 {% endfor %}
                 </tbody>
@@ -92,10 +119,12 @@
     </div>
     <script type="application/javascript">
         window.onload = function () {
-            document.getElementById('{{ search_for }}_radio').checked = true;
-            document.getElementById('{{ search_for }}_label').className += ' active';
-            document.getElementById('{{ search_type }}_radio').checked = true;
-            document.getElementById('{{ search_type }}_label').className += ' active';
+            document.getElementById('{{ for }}_radio').checked = true;
+            document.getElementById('{{ for }}_label').className += ' active';
+            document.getElementById('{{ in }}_radio').checked = true;
+            document.getElementById('{{ in }}_label').className += ' active';
+            document.getElementById('{{ match }}_radio').checked = true;
+            document.getElementById('{{ match }}_label').className += ' active';
             document.getElementById('keyword').value = '{{ keyword }}';
         }
     </script>
