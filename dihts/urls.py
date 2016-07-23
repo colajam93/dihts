@@ -15,8 +15,12 @@ Including another URLconf
 """
 from django.conf.urls import url, include
 from django.contrib import admin
+from dihts.settings import URL_PREFIX
+
+_application_directory = URL_PREFIX if not URL_PREFIX or URL_PREFIX[0] != '/' else URL_PREFIX[1:]
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('song.urls', namespace='song'))
+    url(r'^{}'.format(_application_directory),
+        include('song.urls', namespace='song'))
 ]
