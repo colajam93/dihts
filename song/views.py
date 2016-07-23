@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from song.models import Song, Album
 from django.views.decorators.csrf import ensure_csrf_cookie
+from django.core.paginator import Paginator
 
 FOR, IN, KEYWORD, MATCH, RESULTS = ('for', 'in', 'keyword', 'match', 'results')
 ALBUM, SONG = ('album', 'song')
@@ -35,7 +36,7 @@ def _search_album(**params):
         q = 'year__value'
     query = {match_suffix.format(q): params[KEYWORD]}
     result = Album.objects.filter(**query).order_by('album', 'album_artist')
-    return map(lambda x: {'title': x.album, 'album_artist': x.album_artist, 'artist': '', 'album': ''}, result)
+    return list(map(lambda x: {'title': x.album, 'album_artist': x.album_artist, 'artist': '', 'album': ''}, result))
 
 
 def _search_song(**params):
@@ -54,8 +55,9 @@ def _search_song(**params):
         q = 'album__year__value'
     query = {match_suffix.format(q): params[KEYWORD]}
     result = Song.objects.filter(**query).order_by('album__album_artist', 'album', 'title', 'artist')
-    return map(lambda x: {'title': x.title, 'album_artist': x.album.album_artist, 'artist': x.artist, 'album': x.album},
-               result)
+    return list(
+        map(lambda x: {'title': x.title, 'album_artist': x.album.album_artist, 'artist': x.artist, 'album': x.album},
+            result))
 
 
 @ensure_csrf_cookie
@@ -66,12 +68,13 @@ def search(request):
     search_match = request.GET.get(MATCH, CONTAINS)
     params = {FOR: search_for, IN: search_in, KEYWORD: search_keyword, MATCH: search_match}
 
+    result = []
     if search_keyword:
         if search_for == ALBUM:
-            params[RESULTS] = _search_album(**params)
+            result = _search_album(**params)
         elif search_for == SONG:
-            params[RESULTS] = _search_song(**params)
-    else:
-        params[RESULTS] = []
+            result = _search_song(**params)
+    page = int(request.GET.get('page', 1))
+    params[RESULTS] = Paginator(result, 20).page(page)
 
     return render(request, 'search.html', params)
