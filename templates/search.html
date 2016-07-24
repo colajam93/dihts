@@ -140,8 +140,10 @@
         </ul>
     </div>
     <script type="application/javascript">
+        'use strict';
+
         window.onload = function () {
-            ['{{ for }}', '{{ in }}', '{{ match }}'].forEach(i => {
+            ['{{ for }}', '{{ in }}', '{{ match }}'].forEach(function (i) {
                 document.getElementById(i + '_radio').checked = true;
                 document.getElementById(i + '_label').className += ' active';
             });
@@ -149,8 +151,8 @@
         };
         function move_page(page) {
             document.getElementById('page').value = page;
-            const form = document.getElementById('f');
-            form.submit()
+            var form = document.getElementById('f');
+            form.submit();
         }
     </script>
 {% endblock content %}
