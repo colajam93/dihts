@@ -1,3 +1,9 @@
+# DEPRECATED
+
+[![No Maintenance Intended](http://unmaintained.tech/badge.svg)](http://unmaintained.tech/)
+
+This repository is no longer maintained because I do not use the iTunes to manage music library.
+
 # Do I have this song?
 
 Simple iTunes library search tool using Django.
